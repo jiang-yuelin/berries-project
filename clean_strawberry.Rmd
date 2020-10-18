@@ -1,0 +1,132 @@
+---
+title: "clean_strawberry"
+author: "Yuelin Jiang"
+date: "10/18/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+library(knitr)
+library(tidyverse)
+library(magrittr)
+library(kableExtra)
+library(stringr)
+
+opts_chunk$set(echo = FALSE, 
+               warning = FALSE,
+               message = FALSE)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##  Acquire and read the data
+
+These data were collected from the USDA database selector: <a href="https://quickstats.nass.usda.gov">https://quickstats.nass.usda.gov</a>
+
+The data were <a href="https://quickstats.nass.usda.gov/results/D416E96E-3D5C-324C-9334-1D38DF88FFF1">stored online</a> and then downloaded as a CSV file.
+
+```{r}
+## read the data
+
+ag_data <- read_csv("berries.csv", col_names = TRUE)
+
+## look at number of unique values in each column
+ag_data %>% summarize_all(n_distinct) -> aa
+
+
+## make a list of the columns with only one unique value
+bb <- which(aa[1,]==1)
+
+## list the 1-unique valu column names 
+cn <- colnames(ag_data)[bb]
+cn
+```
+
+Data selected from the NASS database often has columns without any data or with a single repeated Values.  The berries data had only 8 out of 21 columns containing meaningful data. These first steps of cleaning codes are recycled from Haviland's code in ag_data.rmd
+
+```{r}
+## remove the 1-unique columns from the dataset
+ag_data %<>% select(-all_of(bb))
+
+aa %<>% select(-all_of(bb)) 
+
+
+## State name and the State ANSI code are (sort of) redundant
+## Just keep the name
+ag_data %<>% select(-4)
+aa %<>% select(-4) 
+
+
+kable(head(ag_data)) %>% kable_styling(font_size=12)
+```
+
+Only selet strawberries as our commodity for EDA, and only select when period equals year.
+
+
+```{r}
+sberry <- ag_data %>% filter((Commodity=="STRAWBERRIES") & (Period=="YEAR"))
+sberry %<>% select(-c(Commodity, Period))
+
+# Does every Data Item begin with "STRAWBERRIES"
+sum(str_detect(sberry$`Data Item`, "^STRAWBERRIES")) == length(sberry$`Data Item`)
+
+# Remove "STRAWBERRIES" in the begginning of the Data Item column, drop this column
+sberry %<>% separate(`Data Item`, c('straw', 'data_item'), sep = nchar("STRAWBERRIES")+2)
+sberry %<>% select(-c(straw))
+
+sberry %<>% separate(data_item, c('what', 'measure', 'how'), sep = ",")
+sberry$what %>% unique()
+
+# Notice when 'what' == 'PROCESSING', content of measure is in 'how' column. Switch the content
+sberry %<>% mutate(measure = ifelse(what == "PROCESSING", how, measure))
+sberry %<>% mutate(how = ifelse(what == "PROCESSING", "", how))
+
+# Repeat the above process for 'what' == 'FRESH MARKET'
+sberry %<>% mutate(what = ifelse(what == "FRESH MARKET", "FRESH MARKET - UTILIZED - PRODUCTION", what))
+sberry %<>% mutate(measure = ifelse(what == "FRESH MARKET - UTILIZED - PRODUCTION", how, measure))
+sberry %<>% mutate(how = ifelse(what == "FRESH MARKET - UTILIZED - PRODUCTION", "", how))
+
+# 
+
+sberry$unit <- ""
+sberry %<>% mutate(unit = ifelse(str_detect(sberry$measure, "^ MEASURED IN "), substr(sberry$measure, nchar(" MEASURED IN ")+1, nchar(sberry$measure)))) 
+                 
+# sberry$unit %>% unique()     
+# sberry$how %>% unique()
+
+sberry %<>% select(-c(how, measure))
+```
+
+Now work on separating the 'Domain' and 'Domain Category' columns into meaningful columns.
+
+```{r}
+
+
+sberry$Domain %>% unique()
+# Separate the Domain column by ","
+sberry %<>% separate(Domain, c('domain1', 'domain2'), sep = ",")
+
+
+sberry$`Domain Category` %>% unique()
+# separate Domain Category by ","
+
+sberry %<>% separate(`Domain Category`, c('dc1', 'dc2', 'dc_detail'), sep = "[,\\:]", convert = TRUE, extra = "merge")
+
+sberry$dc1 %>% unique()
+
+# Manually fix for type [4]
+# sberry %<>% mutate(dc2 = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN�= 138831)
+# ", "INSECTICIDE", dc2))
+# sberry %<>% mutate(dc_detail = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN\xa0= 138831)", "(CYFLUMETOFEN = 138831)", dc_detail))
+# sberry %<>% mutate(dc1 = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN\xa0= 138831)", "CHEMICAL", dc1))
+
+sberry[is.na(sberry)] <- " "
+sberry$dc1 %>% unique()
+
+```
+
+```{r}
+write.csv(sberry, "sberry_cleaned.csv")
+
+```
+
