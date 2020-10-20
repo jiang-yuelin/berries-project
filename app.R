@@ -137,22 +137,32 @@ ui <- fluidPage(
 server <- function(input, output) {
     
     output$prodtable <- renderTable({
-            if(input$state =="All"){
+            if(input$state =="All" & input$year == "All"){
                 filtered <- prod
-            } else {
-                filtered <- prod %>% filter( State == input$State)
+            } else if (input$year == "All"){
+                filtered <- prod %>% filter(State == input$state)
+            } else if (input$state == "All"){
+                filtered <- prod %>% filter(Year == input$year)
             }
+              else {
+                filtered <- prod %>% filter(State == input$state & Year ==input$year )
+            }
+            filtered %<>% select(Year, State, Value)
+            names(filtered) = c("Year", "State", "Production value in $" )
             filtered
         })
     
     output$prodplot <- renderPlot({
         if(input$state =="All"){
-            
+            filtered <- prod
+            p <- ggplot(data = filtered)+
+                geom_point(aes(x=Year, y= Value/1000000, color = factor(State)), alpha=0.6, size =5)
         } else {
-            filtered <- prod %>% filter( State == input$State)
+            filtered <- prod %>% filter(State == input$state)
+            p <- ggplot(data = filtered)+
+                geom_point(aes(x=Year, y= Value/1000000), color = "skyblue", size = 5)
         }
-        p <- ggplot(data = filtered)+
-            geom_point(aes(x=Year, y= Value)) 
+         
         p
     })
 }

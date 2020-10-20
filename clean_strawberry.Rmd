@@ -11,6 +11,7 @@ library(tidyverse)
 library(magrittr)
 library(kableExtra)
 library(stringr)
+library(ggplot2)
 
 opts_chunk$set(echo = FALSE, 
                warning = FALSE,
@@ -134,56 +135,105 @@ num$Value <- as.numeric(num$Value)/1000000
 
 ## Exploratory Data Analysis
 
-### Total Data for each states across the years
+### Total Production Data for each state across the years
 ```{r}
 d_total <- subset(sberry, domain1 == "TOTAL")
 
-state_list <- d_total$State %>% unique()
-
 # Subset where unit is in $
 usd <- subset(d_total, unit == "$")
+test <- usd
 
-# Set unit in millions $
-usd %<>% mutate(Value= ifelse(nchar(Value)<8, "000000000", Value))
-
-usd$Value <- substr(usd$Value, 1, nchar(usd$Value)-8)
-usd$Value <- as.numeric(sub(",", "", usd$Value, fixed = TRUE))
+# Set value to numeric
+usd$Value <- as.numeric(gsub(pattern = ",", replacement = "",usd$Value))
+usd[is.na(usd)] <- 0
 
 # Prepare dataset of production for plots
 prod <- subset(usd, what == " PRODUCTION" )
 
 # Plot production by each state
 par(mfrow = c(3,4))
-
+state_list <- d_total$State %>% unique()
 
 for (i in state_list) {
   stateTotal <- subset(prod, State == i)
-  plot(x =stateTotal$Year, y = stateTotal$Value, xlab="Year", ylab=paste(i),
-       title(main = "Production in millions $"), pch =16, ylim =c(0,2900), xlim = c(2015, 2019))
+  plot(x =stateTotal$Year, y = stateTotal$Value/1000000, xlab="Year", ylab=paste(i),
+       title(main = "Production in millions $"), pch =16, ylim =c(0, 2900), xlim = c(2015, 2019))
 }
 
 ```
 
-### Relationship between use of fertilizers and yield per acre.
+### Relationship between amount of fertilizers and yield per acre.
 
 ```{r}
+#, warning=FALSE, message=FALSE
 # Prepare database for yield
-yield <- subset(d_total, what == " YIELD")
+yield <- subset(d_total, what == " YIELD" )
 
 
-# Make values numeric
-yield %<>% mutate(Value = ifelse(Value=="(NA)", "0", Value) )
-yield$Value %<>% as.numeric(yield$Value)  
-# class(yield$Value)
+# # Make values numeric
+# yield %<>% mutate(Value = ifelse(Value=="(NA)", "0", Value) )
+# yield$Value %<>% as.numeric(yield$Value)  
+# # class(yield$Value)
 
 # Prepare database for fertilizer used, unit LB/ARE/YEAR
+fert <- subset(sberry, domain1 =="FERTILIZER" & unit == "LB / ACRE / YEAR")
 
-  
+# Since fertilizer data only exists for california and florida in year 2018 and 2019, 
+yield <- subset(d_total, what == " YIELD" & (State == "CALIFORNIA" | State== "FLORIDA")& (Year=="2019" |Year=="2018") ) 
+
+fert %<>% fill()
+
+
+fert$yield <- NA
+statelist<- fert%>% unique()
+
+fert$Value<- as.numeric(fert$Value)
+fert[is.na(fert)] <- 0
+
+for (i in 1:15) {
+  if (fert$Year[i]=="2018"){
+    if(fert$State[i]=="CALIFORNIA"){
+      fert$yield[i] <- 660
+    } else {
+      fert$yield[i] <- 250
+    }
+  } else {
+    if(fert$State[i]=="CALIFORNIA"){
+      fert$yield[i] <- 580
+    } else{
+      fert$yield[i] <- 215
+    }
+  }
+}
+
+
+ggplot(data = fert)+
+  geom_point(aes(x= Value, y= yield,  color = factor(State)) )+
+  ylab("Strawberry Yield (CWT/ACRE)")+
+  xlab("Fertilizer applied (LB /ACRE /Year)")
+  # title(main = "Strawberry yield as a function of fertilizers")
+
+
 ```
 
 
+### Chemicals used
+
+```{r}
+# Dataframe of total amount of chemicals used
+
+chemi <- subset(sberry, dc_detail ==" (TOTAL)" & unit == "LB")
+
+chemi$Value <-as.numeric(gsub(pattern = ",", replacement = "",chemi$Value)) 
+class(chemi$Value)
+
+chemi[is.na(chemi)] <- 0
+chemi$State %>% unique()
+```
 
 
+```{r}
 
+```
 
 
