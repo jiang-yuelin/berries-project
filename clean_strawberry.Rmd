@@ -59,7 +59,7 @@ aa %<>% select(-4)
 
 kable(head(ag_data)) %>% kable_styling(font_size=12)
 ```
-
+## Data Cleaning
 Only selet strawberries as our commodity for EDA, and only select when period equals year.
 
 
@@ -127,6 +127,63 @@ sberry$dc1 %>% unique()
 
 ```{r}
 write.csv(sberry, "sberry_cleaned.csv")
+num<- sberry
+num$Value <- gsub(pattern = ",", replacement = "", sberry$Value)
+num$Value <- as.numeric(num$Value)/1000000
+```
+
+## Exploratory Data Analysis
+
+### Total Data for each states across the years
+```{r}
+d_total <- subset(sberry, domain1 == "TOTAL")
+
+state_list <- d_total$State %>% unique()
+
+# Subset where unit is in $
+usd <- subset(d_total, unit == "$")
+
+# Set unit in millions $
+usd %<>% mutate(Value= ifelse(nchar(Value)<8, "000000000", Value))
+
+usd$Value <- substr(usd$Value, 1, nchar(usd$Value)-8)
+usd$Value <- as.numeric(sub(",", "", usd$Value, fixed = TRUE))
+
+# Prepare dataset of production for plots
+prod <- subset(usd, what == " PRODUCTION" )
+
+# Plot production by each state
+par(mfrow = c(3,4))
+
+
+for (i in state_list) {
+  stateTotal <- subset(prod, State == i)
+  plot(x =stateTotal$Year, y = stateTotal$Value, xlab="Year", ylab=paste(i),
+       title(main = "Production in millions $"), pch =16, ylim =c(0,2900), xlim = c(2015, 2019))
+}
 
 ```
+
+### Relationship between use of fertilizers and yield per acre.
+
+```{r}
+# Prepare database for yield
+yield <- subset(d_total, what == " YIELD")
+
+
+# Make values numeric
+yield %<>% mutate(Value = ifelse(Value=="(NA)", "0", Value) )
+yield$Value %<>% as.numeric(yield$Value)  
+# class(yield$Value)
+
+# Prepare database for fertilizer used, unit LB/ARE/YEAR
+
+  
+```
+
+
+
+
+
+
 

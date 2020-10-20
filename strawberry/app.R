@@ -11,7 +11,7 @@ library(shiny)
 library(tidyverse)
 
 # import cleaned dataframe
-berry <- read.csv("")
+berry <- read.csv("sberry_cleaned.csv")
 
 
 # Define UI for application that draws a histogram
