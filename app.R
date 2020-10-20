@@ -12,18 +12,23 @@ library(tidyverse)
 
 # import cleaned dataframe
 sberry <- read.csv("sberry_cleaned.csv")
-d_total <- subset(sberry, domain1 == "TOTAL")
 
-# Subset where unit is in $
+
+# prepare dataframe for production
+d_total <- subset(sberry, domain1 == "TOTAL")
 usd <- subset(d_total, unit == "$")
 test <- usd
 
-# Set value to numeric
 usd$Value <- as.numeric(gsub(pattern = ",", replacement = "",usd$Value))
 usd[is.na(usd)] <- 0
 
-# Prepare dataset of production for plots
 prod <- subset(usd, what == " PRODUCTION" )
+
+# prepare dataframe for yield
+yield <- subset(d_total, what == " YIELD")
+yield %<>% select(Year, State, Value, unit)
+yield$Value <- as.numeric(gsub(pattern = ",", replacement = "",yield$Value))
+yield[is.na(yield)]<- 0
 
 # Build Shiny UI
 ui <- fluidPage(
@@ -63,75 +68,76 @@ ui <- fluidPage(
                          # Create plots for production of each state
                          plotOutput("prodplot"),
                          tableOutput("prodtable"),
-                         br(),br(),
+                         br(),br()
                          # plotOutput("yieldplot"),
                          # br(), 
-                         # plotOutput("harvest"))
-                # ,
-                # 
-                # tabPanel("Strawberry Fertilizer and Yield",
-                #          
-                #          # Create a new Row in the UI for selectInputs
-                #          fluidRow(
-                #              column(4,
-                #                     selectInput("year2",
-                #                                 "Year:",
-                #                                 c("All",
-                #                                   unique(data_rain$year))
-                #                     ),
-                #              ),
-                #              column(4,
-                #                     selectInput("state",
-                #                                 "State:",
-                #                                 c("All", unique(fert$State))
-                #                         
-                #                     )  
-                #              ),
-                #              # Plot rain of the year
-                #              plotOutput("rainplot"),
-                #              br(), br(),
-                #              br(), 
-                #              # Create summary table for rain of the year
-                #              tableOutput("rainsum"),
-                #              br(),
-                #              
-                #              # Create summary table for selected fips(county)
-                #              # tableOutput("fipssum"), br(),
-                #              # Plot storm& rain for selected fips
-                #              # plotOutput("fipsplot"),
-                #              br() 
-                #              
-                #          )
-                # )
-                #  ,
-                # 
-                # tabPanel("Chemicals",
-                #          
-                #          fluidRow(
-                #              column(4,
-                #                  selectInput(
-                #                      "chemitype",
-                #                      "Chemical type:",
-                #                      c("All", unique(as.character(sberry$dc2) ))
-                #                  ),
-                #              ),
-                #              column(4,
-                #                     selectInput(
-                #                         "state",
-                #                         "State:",
-                #                         c("All", unique(as.character(chemi$State) ))
-                #                     )
-                #                  
-                #              ),
-                #              plotOutput("chemi plot")
-                #          )
-                #          
-                # )
+                         # plotOutput("harvest")
+                         )
+                ,
+
+                tabPanel("Strawberry Yield",
+
+                         # Create a new Row in the UI for selectInputs
+                         fluidRow(
+                             column(4,
+                                    selectInput("yearY",
+                                                "Year:",
+                                                c("All",
+                                                  unique(yield$Year))
+                                    ),
+                             ),
+                             column(4,
+                                    selectInput("stateY",
+                                                "State:",
+                                                c("All", unique(yield$State))
+
+                                    )
+                             ),
+                             # Plot rain of the year
+                             plotOutput("yieldPlot"),
+                             br(), br(),
+                             br(),
+                             # Create summary table for rain of the year
+                             tableOutput("yieldSum"),
+                             br(),
+
+                             # Create summary table for selected fips(county)
+                             # tableOutput("fipssum"), br(),
+                             # Plot storm& rain for selected fips
+                             #plotOutput("fertPlot"),
+                             br()
+
+                         )
+                )
+                 ,
+
+                tabPanel("Chemicals",
+
+                         fluidRow(
+                             column(4,
+                                 selectInput(
+                                     "chemitype",
+                                     "Chemical type:",
+                                     c("All", unique(as.character(chemi$dc2) ))
+                                 ),
+                             ),
+                             column(4,
+                                    selectInput(
+                                        "state",
+                                        "State:",
+                                        c("All", unique(as.character(chemi$State) ))
+                                    )
+
+                             ),
+                             plotOutput("chemi plot")
+                         )
+
+                )
             )
         )
     )
 )
-)
+
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
@@ -148,7 +154,7 @@ server <- function(input, output) {
                 filtered <- prod %>% filter(State == input$state & Year ==input$year )
             }
             filtered %<>% select(Year, State, Value)
-            names(filtered) = c("Year", "State", "Production value in $" )
+            names(filtered) = c("Year", "State", "Production value in $")
             filtered
         })
     
@@ -165,6 +171,56 @@ server <- function(input, output) {
          
         p
     })
+    
+    output$yieldPlot <- renderPlot({
+        if(input$stateY =="All" & input$yearY == "All"){
+            filtered <- yield
+            p <- ggplot(data = filtered)+
+                geom_point(aes(x=Year, y= Value, color = factor(State)), alpha=0.6, size = 5)+
+                ylim(c(0, 800))+
+                xlim(c(2015, 2019))
+        } else if (input$yearY == "All"){
+            filtered <- yield %>% filter(State == input$stateY)
+            p <- ggplot(data = filtered)+
+                geom_col(aes(x=Year, y= Value, fill = State),  width = 0.4)+
+                ylim(c(0, 800))+
+                xlim(c(2014, 2020))
+        } else if (input$stateY == "All"){
+            filtered <- yield %>% filter(Year == input$yearY)
+            p <- ggplot(data = filtered)+
+                geom_point(aes(x=Year, y= Value, color = factor(State)), alpha=0.6, size = 5)+
+                ylim(c(0, 800))+
+                xlim(c(2014, 2020))
+        }
+        else {
+            filtered <- yield %>% filter(State == input$stateY)
+            p <- ggplot(data = filtered)+
+                geom_col(aes(x=Year, y= Value, fill = State),  width = 0.4)+
+                ylim(c(0, 800))+
+                xlim(c(2014, 2020))
+        }
+        
+        p
+    })
+    
+    output$yieldSum <- renderTable({
+        
+        if(input$stateY =="All" & input$yearY == "All"){
+            filtered <- yield
+        } else if (input$yearY == "All"){
+            filtered <- yield %>% filter(State == input$stateY)
+        } else if (input$stateY == "All"){
+            filtered <- yield %>% filter(Year == input$yearY)
+        }
+        else {
+            filtered <- yield %>% filter(State == input$stateY & Year ==input$yearY )
+        }
+        
+        filtered %<>% select(Year, State, Value, unit)
+        names(filtered) = c("Year", "State", "Yield", "Unit")
+        filtered
+    })
+    
 }
 
 # Run the application 
