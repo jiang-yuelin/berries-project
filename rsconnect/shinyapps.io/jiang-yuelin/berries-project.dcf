@@ -1,0 +1,12 @@
+name: berries-project
+title: berries-project
+username:
+account: jiang-yuelin
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3055865
+bundleId: 3762083
+url: https://jiang-yuelin.shinyapps.io/berries-project/
+when: 1603192997.1747
+asMultiple: FALSE
+asStatic: FALSE

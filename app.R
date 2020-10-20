@@ -9,6 +9,9 @@
 
 library(shiny)
 library(tidyverse)
+library(ggplot2)
+library(conflicted)
+filter <- dplyr::filter
 
 # import cleaned dataframe
 sberry <- read.csv("sberry_cleaned.csv")
@@ -26,7 +29,7 @@ prod <- subset(usd, what == " PRODUCTION" )
 
 # prepare dataframe for yield
 yield <- subset(d_total, what == " YIELD")
-yield %<>% select(Year, State, Value, unit)
+yield <- yield %>% select(Year, State, Value, unit)
 yield$Value <- as.numeric(gsub(pattern = ",", replacement = "",yield$Value))
 yield[is.na(yield)]<- 0
 
@@ -118,14 +121,14 @@ ui <- fluidPage(
                                  selectInput(
                                      "chemitype",
                                      "Chemical type:",
-                                     c("All", unique(as.character(chemi$dc2) ))
+                                     c("All", unique(as.character(sberry$dc2) ))
                                  ),
                              ),
                              column(4,
                                     selectInput(
                                         "state",
                                         "State:",
-                                        c("All", unique(as.character(chemi$State) ))
+                                        c("All", unique(as.character(sberry$State) ))
                                     )
 
                              ),
@@ -153,7 +156,7 @@ server <- function(input, output) {
               else {
                 filtered <- prod %>% filter(State == input$state & Year ==input$year )
             }
-            filtered %<>% select(Year, State, Value)
+            filtered <- filtered %>% select(Year, State, Value)
             names(filtered) = c("Year", "State", "Production value in $")
             filtered
         })
@@ -216,7 +219,7 @@ server <- function(input, output) {
             filtered <- yield %>% filter(State == input$stateY & Year ==input$yearY )
         }
         
-        filtered %<>% select(Year, State, Value, unit)
+        filtered <- filtered %>% select (Year, State, Value, unit)
         names(filtered) = c("Year", "State", "Yield", "Unit")
         filtered
     })
