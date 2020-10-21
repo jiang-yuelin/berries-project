@@ -1,16 +1,18 @@
 ---
-title: "clean_strawberry"
+title: "Berries Project"
+subtitle: "MA615, Fall 2020"
 author: "Yuelin Jiang"
 date: "10/18/2020"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE, warning=FALSE, message=FALSE}
 library(knitr)
 library(tidyverse)
-library(magrittr)
 library(kableExtra)
-library(stringr)
+library(magrittr)
 library(ggplot2)
 
 opts_chunk$set(echo = FALSE, 
@@ -26,7 +28,7 @@ These data were collected from the USDA database selector: <a href="https://quic
 
 The data were <a href="https://quickstats.nass.usda.gov/results/D416E96E-3D5C-324C-9334-1D38DF88FFF1">stored online</a> and then downloaded as a CSV file.
 
-```{r}
+```{r,warning=FALSE, message=FALSE}
 ## read the data
 
 ag_data <- read_csv("berries.csv", col_names = TRUE)
@@ -40,12 +42,11 @@ bb <- which(aa[1,]==1)
 
 ## list the 1-unique valu column names 
 cn <- colnames(ag_data)[bb]
-cn
 ```
 
 Data selected from the NASS database often has columns without any data or with a single repeated Values.  The berries data had only 8 out of 21 columns containing meaningful data. These first steps of cleaning codes are recycled from Haviland's code in ag_data.rmd
 
-```{r}
+```{r,warning=FALSE, message=FALSE}
 ## remove the 1-unique columns from the dataset
 ag_data %<>% select(-all_of(bb))
 
@@ -64,21 +65,23 @@ kable(head(ag_data)) %>% kable_styling(font_size=12)
 Only selet strawberries as our commodity for EDA, and only select when period equals year.
 
 
-```{r}
-sberry <- ag_data %>% filter((Commodity=="STRAWBERRIES") & (Period=="YEAR"))
+```{r,warning=FALSE, message=FALSE}
+
+# Select strawberry as our fruit, and YEAR period for further analysis
+sberry <- ag_data %>% dplyr::filter((Commodity=="STRAWBERRIES") & (Period=="YEAR"))
 sberry %<>% select(-c(Commodity, Period))
 
-# Does every Data Item begin with "STRAWBERRIES"
+# Check if every Data Item column begin with "STRAWBERRIES"
 sum(str_detect(sberry$`Data Item`, "^STRAWBERRIES")) == length(sberry$`Data Item`)
 
-# Remove "STRAWBERRIES" in the begginning of the Data Item column, drop this column
+# Remove "STRAWBERRIES" in the beginning of the Data Item column, drop this column
 sberry %<>% separate(`Data Item`, c('straw', 'data_item'), sep = nchar("STRAWBERRIES")+2)
 sberry %<>% select(-c(straw))
 
 sberry %<>% separate(data_item, c('what', 'measure', 'how'), sep = ",")
-sberry$what %>% unique()
 
-# Notice when 'what' == 'PROCESSING', content of measure is in 'how' column. Switch the content
+
+# Notice when 'what' == 'PROCESSING', "MEASURED IN.." is in 'how' column. Switch the content for these rows.
 sberry %<>% mutate(measure = ifelse(what == "PROCESSING", how, measure))
 sberry %<>% mutate(how = ifelse(what == "PROCESSING", "", how))
 
@@ -87,50 +90,45 @@ sberry %<>% mutate(what = ifelse(what == "FRESH MARKET", "FRESH MARKET - UTILIZE
 sberry %<>% mutate(measure = ifelse(what == "FRESH MARKET - UTILIZED - PRODUCTION", how, measure))
 sberry %<>% mutate(how = ifelse(what == "FRESH MARKET - UTILIZED - PRODUCTION", "", how))
 
-# 
+# If measure column starts with "MEASURED IN", get rid of it, only unit is left.
 
-sberry$unit <- ""
-sberry %<>% mutate(unit = ifelse(str_detect(sberry$measure, "^ MEASURED IN "), substr(sberry$measure, nchar(" MEASURED IN ")+1, nchar(sberry$measure)))) 
+sberry %<>% mutate(measure = ifelse(str_detect(sberry$measure, "^ MEASURED IN "), substr(sberry$measure, nchar(" MEASURED IN ")+1, nchar(sberry$measure)))) 
+
+names(sberry)[4] <- paste("unit")
                  
-# sberry$unit %>% unique()     
-# sberry$how %>% unique()
+# delete useless column, fill NA value
+sberry %<>% select(-c(how))
+sberry[is.na(sberry)] <-""
 
-sberry %<>% select(-c(how, measure))
+# Check if all unit is in the correst format
+sberry$unit %>% unique()
+
+# Check header of current dataframe
+kable(head(sberry)) %>% kable_styling(font_size=12)
+
 ```
 
 Now work on separating the 'Domain' and 'Domain Category' columns into meaningful columns.
 
-```{r}
+```{r,warning=FALSE, message=FALSE}
 
-
-sberry$Domain %>% unique()
 # Separate the Domain column by ","
 sberry %<>% separate(Domain, c('domain1', 'domain2'), sep = ",")
 
-
-sberry$`Domain Category` %>% unique()
-# separate Domain Category by ","
+# separate Domain Category by "," and ":"
 
 sberry %<>% separate(`Domain Category`, c('dc1', 'dc2', 'dc_detail'), sep = "[,\\:]", convert = TRUE, extra = "merge")
 
-sberry$dc1 %>% unique()
 
-# Manually fix for type [4]
-# sberry %<>% mutate(dc2 = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN�= 138831)
-# ", "INSECTICIDE", dc2))
-# sberry %<>% mutate(dc_detail = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN\xa0= 138831)", "(CYFLUMETOFEN = 138831)", dc_detail))
-# sberry %<>% mutate(dc1 = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN\xa0= 138831)", "CHEMICAL", dc1))
-
-sberry[is.na(sberry)] <- " "
-sberry$dc1 %>% unique()
+sberry[is.na(sberry)] <- ""
+kable(head(sberry)) %>% kable_styling(font_size=12)
 
 ```
 
+Save sberry to csv file for shiny app use.
 ```{r}
 write.csv(sberry, "sberry_cleaned.csv")
-num<- sberry
-num$Value <- gsub(pattern = ",", replacement = "", sberry$Value)
-num$Value <- as.numeric(num$Value)/1000000
+
 ```
 
 ## Exploratory Data Analysis
@@ -162,11 +160,15 @@ for (i in state_list) {
 
 ```
 
+
+The above graphs show that California has the highest value of strawberry productions over the years 2015 to 2019, Florida has the second highest production value. 
+
+
 ### Relationship between amount of fertilizers and yield per acre.
 
-```{r}
-#, warning=FALSE, message=FALSE
-# Prepare database for yield
+```{r, warning=FALSE, message=FALSE}
+
+# Prepare database for yield plots
 yield <- subset(d_total, what == " YIELD" )
 
 
@@ -180,60 +182,91 @@ fert <- subset(sberry, domain1 =="FERTILIZER" & unit == "LB / ACRE / YEAR")
 
 # Since fertilizer data only exists for california and florida in year 2018 and 2019, 
 yield <- subset(d_total, what == " YIELD" & (State == "CALIFORNIA" | State== "FLORIDA")& (Year=="2019" |Year=="2018") ) 
-
-fert %<>% fill()
-
+yield$Value <- as.numeric(yield$Value)
 
 fert$yield <- NA
 statelist<- fert%>% unique()
 
-fert$Value<- as.numeric(fert$Value)
-fert[is.na(fert)] <- 0
 
+# fill each state's total yield by the yield table
 for (i in 1:15) {
   if (fert$Year[i]=="2018"){
     if(fert$State[i]=="CALIFORNIA"){
-      fert$yield[i] <- 660
+      fert$yield[i] <- yield[3,10]
     } else {
-      fert$yield[i] <- 250
+      fert$yield[i] <- yield[4,10]
     }
   } else {
     if(fert$State[i]=="CALIFORNIA"){
-      fert$yield[i] <- 580
+      fert$yield[i] <- yield[1,10]
     } else{
-      fert$yield[i] <- 215
+      fert$yield[i] <- yield[2,10]
     }
   }
 }
-
+# make values numeric
+fert$Value<- as.numeric(fert$Value)
+fert[is.na(fert)] <- 0
+fert$yield <- as.numeric(fert$yield)
+class(fert$yield)
 
 ggplot(data = fert)+
   geom_point(aes(x= Value, y= yield,  color = factor(State)) )+
-  ylab("Strawberry Yield (CWT/ACRE)")+
-  xlab("Fertilizer applied (LB /ACRE /Year)")
-  # title(main = "Strawberry yield as a function of fertilizers")
+  labs(title = "Strawberry yield as a function of fertilizers", x = "Fertilizer applied (LB /ACRE /Year)", y = "Strawberry Yield (CWT/ACRE)")
 
 
 ```
 
+
+We can observe from the above graph that, California in general uses way more fertilizers per acre per year than Florida, and has more Strawberry Yield per acre than Florida too. This EDA suggests potential further study on fertilizer yield and berry yield.
 
 ### Chemicals used
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 # Dataframe of total amount of chemicals used
 
-chemi <- subset(sberry, dc_detail ==" (TOTAL)" & unit == "LB")
+chemi <- subset(sberry, dc_detail ==" (TOTAL)")
 
 chemi$Value <-as.numeric(gsub(pattern = ",", replacement = "",chemi$Value)) 
-class(chemi$Value)
+
 
 chemi[is.na(chemi)] <- 0
-chemi$State %>% unique()
+state_chemi <- chemi$State %>% unique()
+
+# subsetting chemi into total chemical used and percentage of land used by unit
+chemi_pct <- subset(chemi, unit == "PCT OF AREA BEARING")
+chemi_lb <- subset(chemi,  unit == "LB")
+
+
+che <- chemi$dc2 %>% unique()
+# plot each state's use of different chemicals
+for (c in che) {
+  cData <- subset(chemi_lb, dc2==c)
+  
+  chemiPlot <- ggplot(data = cData)+
+              geom_point(aes(x = Year, y = Value/1000, color = factor(State)))+
+              labs(title = "Total Fertilizers used by Year and State", y = paste(c, "in LB") )+
+              xlim(c(2016,2019))
+  
+  print(chemiPlot)
+}
 ```
 
+From the above plots, we can observe that California uses more Chemicals in total. Since California has the highest amount of planted strawberries, this is within expectation. Further analysis could investigate whether the use of each chemical per acre has any effect on the berry yield per acre.
 
-```{r}
+## Reference
 
+This project references to Haviland's codes of data acquiring and reading, and receives help from Zhiwei Liang and Chenxun Li about how to transform characters to numeric forms, and what type of visualizations to implement. 
+
+This berries project uses packages tidyverse(Wickham et al., 2019), ggplot2(H. Wickham, 2016), kableExtra(Hao Zhu, 2020), and magrittr(S. M. Bache and H. Wickham, 2014) for data cleaning. The final report is complied by knitr(Yihui Xie, 2020), app is built using package shiny(Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson, 2020)
+
+```{r,include=FALSE, warning=FALSE, message=FALSE}
+citation("knitr")
+citation("tidyverse")
+citation("ggplot2")
+citation("kableExtra")
+citation("magrittr")
+citation("shiny")
 ```
 
 
