@@ -1,0 +1,672 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={clean\_strawberry},
+  pdfauthor={Yuelin Jiang},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+
+\title{clean\_strawberry}
+\author{Yuelin Jiang}
+\date{10/18/2020}
+
+\begin{document}
+\maketitle
+
+\hypertarget{acquire-and-read-the-data}{%
+\subsection{Acquire and read the data}\label{acquire-and-read-the-data}}
+
+These data were collected from the USDA database selector:
+https://quickstats.nass.usda.gov
+
+The data were stored online and then downloaded as a CSV file.
+
+Data selected from the NASS database often has columns without any data
+or with a single repeated Values. The berries data had only 8 out of 21
+columns containing meaningful data. These first steps of cleaning codes
+are recycled from Haviland's code in ag\_data.rmd
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## remove the 1-unique columns from the dataset}
+\NormalTok{ag_data }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{all_of}\NormalTok{(bb))}
+
+\NormalTok{aa }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{all_of}\NormalTok{(bb)) }
+
+
+\CommentTok{## State name and the State ANSI code are (sort of) redundant}
+\CommentTok{## Just keep the name}
+\NormalTok{ag_data }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\NormalTok{)}
+\NormalTok{aa }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\NormalTok{) }
+
+
+\KeywordTok{kable}\NormalTok{(}\KeywordTok{head}\NormalTok{(ag_data)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{font_size=}\DecValTok{12}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\centering\begingroup\fontsize{12}{14}\selectfont
+
+\begin{tabular}{r|l|l|l|l|l|l|l}
+\hline
+Year & Period & State & Commodity & Data Item & Domain & Domain Category & Value\\
+\hline
+2019 & MARKETING YEAR & CALIFORNIA & BLUEBERRIES & BLUEBERRIES, TAME - PRICE RECEIVED, MEASURED IN \$ / LB & TOTAL & NOT SPECIFIED & 2.85\\
+\hline
+2019 & MARKETING YEAR & CALIFORNIA & BLUEBERRIES & BLUEBERRIES, TAME, FRESH MARKET - PRICE RECEIVED, MEASURED IN \$ / LB & TOTAL & NOT SPECIFIED & 3.56\\
+\hline
+2019 & MARKETING YEAR & CALIFORNIA & BLUEBERRIES & BLUEBERRIES, TAME, PROCESSING - PRICE RECEIVED, MEASURED IN \$ / LB & TOTAL & NOT SPECIFIED & 0.29\\
+\hline
+2019 & MARKETING YEAR & CALIFORNIA & RASPBERRIES & RASPBERRIES - PRICE RECEIVED, MEASURED IN \$ / LB & TOTAL & NOT SPECIFIED & 2.69\\
+\hline
+2019 & MARKETING YEAR & CALIFORNIA & RASPBERRIES & RASPBERRIES, FRESH MARKET - PRICE RECEIVED, MEASURED IN \$ / LB & TOTAL & NOT SPECIFIED & (D)\\
+\hline
+2019 & MARKETING YEAR & CALIFORNIA & RASPBERRIES & RASPBERRIES, PROCESSING - PRICE RECEIVED, MEASURED IN \$ / LB & TOTAL & NOT SPECIFIED & (D)\\
+\hline
+\end{tabular}
+\endgroup{}
+\end{table}
+
+\hypertarget{data-cleaning}{%
+\subsection{Data Cleaning}\label{data-cleaning}}
+
+Only selet strawberries as our commodity for EDA, and only select when
+period equals year.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sberry <-}\StringTok{ }\NormalTok{ag_data }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{((Commodity}\OperatorTok{==}\StringTok{"STRAWBERRIES"}\NormalTok{) }\OperatorTok{&}\StringTok{ }\NormalTok{(Period}\OperatorTok{==}\StringTok{"YEAR"}\NormalTok{))}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{c}\NormalTok{(Commodity, Period))}
+
+\CommentTok{# Does every Data Item begin with "STRAWBERRIES"}
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{str_detect}\NormalTok{(sberry}\OperatorTok{$}\StringTok{`}\DataTypeTok{Data Item}\StringTok{`}\NormalTok{, }\StringTok{"^STRAWBERRIES"}\NormalTok{)) }\OperatorTok{==}\StringTok{ }\KeywordTok{length}\NormalTok{(sberry}\OperatorTok{$}\StringTok{`}\DataTypeTok{Data Item}\StringTok{`}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Remove "STRAWBERRIES" in the begginning of the Data Item column, drop this column}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{separate}\NormalTok{(}\StringTok{`}\DataTypeTok{Data Item}\StringTok{`}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\StringTok{'straw'}\NormalTok{, }\StringTok{'data_item'}\NormalTok{), }\DataTypeTok{sep =} \KeywordTok{nchar}\NormalTok{(}\StringTok{"STRAWBERRIES"}\NormalTok{)}\OperatorTok{+}\DecValTok{2}\NormalTok{)}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{c}\NormalTok{(straw))}
+
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{separate}\NormalTok{(data_item, }\KeywordTok{c}\NormalTok{(}\StringTok{'what'}\NormalTok{, }\StringTok{'measure'}\NormalTok{, }\StringTok{'how'}\NormalTok{), }\DataTypeTok{sep =} \StringTok{","}\NormalTok{)}
+\NormalTok{sberry}\OperatorTok{$}\NormalTok{what }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unique}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] " ACRES HARVESTED"          " ACRES PLANTED"           
+##  [3] " PRODUCTION"               " YIELD"                   
+##  [5] "BEARING - APPLICATIONS"    "BEARING - TREATED"        
+##  [7] "FRESH MARKET - PRODUCTION" "FRESH MARKET"             
+##  [9] "NOT SOLD - PRODUCTION"     "PROCESSING - PRODUCTION"  
+## [11] "PROCESSING"                "UTILIZED - PRODUCTION"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Notice when 'what' == 'PROCESSING', content of measure is in 'how' column. Switch the content}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{measure =} \KeywordTok{ifelse}\NormalTok{(what }\OperatorTok{==}\StringTok{ "PROCESSING"}\NormalTok{, how, measure))}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{how =} \KeywordTok{ifelse}\NormalTok{(what }\OperatorTok{==}\StringTok{ "PROCESSING"}\NormalTok{, }\StringTok{""}\NormalTok{, how))}
+
+\CommentTok{# Repeat the above process for 'what' == 'FRESH MARKET'}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{what =} \KeywordTok{ifelse}\NormalTok{(what }\OperatorTok{==}\StringTok{ "FRESH MARKET"}\NormalTok{, }\StringTok{"FRESH MARKET - UTILIZED - PRODUCTION"}\NormalTok{, what))}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{measure =} \KeywordTok{ifelse}\NormalTok{(what }\OperatorTok{==}\StringTok{ "FRESH MARKET - UTILIZED - PRODUCTION"}\NormalTok{, how, measure))}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{how =} \KeywordTok{ifelse}\NormalTok{(what }\OperatorTok{==}\StringTok{ "FRESH MARKET - UTILIZED - PRODUCTION"}\NormalTok{, }\StringTok{""}\NormalTok{, how))}
+
+\CommentTok{# }
+
+\NormalTok{sberry}\OperatorTok{$}\NormalTok{unit <-}\StringTok{ ""}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{unit =} \KeywordTok{ifelse}\NormalTok{(}\KeywordTok{str_detect}\NormalTok{(sberry}\OperatorTok{$}\NormalTok{measure, }\StringTok{"^ MEASURED IN "}\NormalTok{), }\KeywordTok{substr}\NormalTok{(sberry}\OperatorTok{$}\NormalTok{measure, }\KeywordTok{nchar}\NormalTok{(}\StringTok{" MEASURED IN "}\NormalTok{)}\OperatorTok{+}\DecValTok{1}\NormalTok{, }\KeywordTok{nchar}\NormalTok{(sberry}\OperatorTok{$}\NormalTok{measure)))) }
+                 
+\CommentTok{# sberry$unit %>% unique()     }
+\CommentTok{# sberry$how %>% unique()}
+
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{c}\NormalTok{(how, measure))}
+\end{Highlighting}
+\end{Shaded}
+
+Now work on separating the `Domain' and `Domain Category' columns into
+meaningful columns.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Separate the Domain column by ","}
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{separate}\NormalTok{(Domain, }\KeywordTok{c}\NormalTok{(}\StringTok{'domain1'}\NormalTok{, }\StringTok{'domain2'}\NormalTok{), }\DataTypeTok{sep =} \StringTok{","}\NormalTok{)}
+
+
+\NormalTok{sberry}\OperatorTok{$}\StringTok{`}\DataTypeTok{Domain Category}\StringTok{`} \OperatorTok{%>%}\StringTok{ }\KeywordTok{unique}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1] "NOT SPECIFIED"                                                                     
+##   [2] "CHEMICAL, FUNGICIDE: (AZOXYSTROBIN = 128810)"                                      
+##   [3] "CHEMICAL, FUNGICIDE: (BACILLUS AMYLOLIQUEFACIENS MBI 600 = 129082)"                
+##   [4] "CHEMICAL, FUNGICIDE: (BACILLUS AMYLOLIQUEFACIENS STRAIN D747 = 16482)"             
+##   [5] "CHEMICAL, FUNGICIDE: (BACILLUS PUMILUS = 6485)"                                    
+##   [6] "CHEMICAL, FUNGICIDE: (BACILLUS SUBT. GB03 = 129068)"                               
+##   [7] "CHEMICAL, FUNGICIDE: (BACILLUS SUBTILIS = 6479)"                                   
+##   [8] "CHEMICAL, FUNGICIDE: (BLAD = 30006)"                                               
+##   [9] "CHEMICAL, FUNGICIDE: (BORAX DECAHYDRATE = 11102)"                                  
+##  [10] "CHEMICAL, FUNGICIDE: (BOSCALID = 128008)"                                          
+##  [11] "CHEMICAL, FUNGICIDE: (BT SUBSP KURSTAKI EVB-113-19 = 6544)"                        
+##  [12] "CHEMICAL, FUNGICIDE: (CAPTAN = 81301)"                                             
+##  [13] "CHEMICAL, FUNGICIDE: (COPPER HYDROXIDE = 23401)"                                   
+##  [14] "CHEMICAL, FUNGICIDE: (COPPER OCTANOATE = 23306)"                                   
+##  [15] "CHEMICAL, FUNGICIDE: (CYFLUFENAMID = 555550)"                                      
+##  [16] "CHEMICAL, FUNGICIDE: (CYPRODINIL = 288202)"                                        
+##  [17] "CHEMICAL, FUNGICIDE: (DIFENOCONAZOLE = 128847)"                                    
+##  [18] "CHEMICAL, FUNGICIDE: (FENHEXAMID = 90209)"                                         
+##  [19] "CHEMICAL, FUNGICIDE: (FLUDIOXONIL = 71503)"                                        
+##  [20] "CHEMICAL, FUNGICIDE: (FLUOPYRAM = 80302)"                                          
+##  [21] "CHEMICAL, FUNGICIDE: (FLUXAPYROXAD = 138009)"                                      
+##  [22] "CHEMICAL, FUNGICIDE: (FOSETYL-AL = 123301)"                                        
+##  [23] "CHEMICAL, FUNGICIDE: (ISOFETAMID = 270000)"                                        
+##  [24] "CHEMICAL, FUNGICIDE: (MEFENOXAM = 113502)"                                         
+##  [25] "CHEMICAL, FUNGICIDE: (MONO-POTASSIUM SALT = 76416)"                                
+##  [26] "CHEMICAL, FUNGICIDE: (MYCLOBUTANIL = 128857)"                                      
+##  [27] "CHEMICAL, FUNGICIDE: (PENTHIOPYRAD = 90112)"                                       
+##  [28] "CHEMICAL, FUNGICIDE: (POLYOXIN D ZINC SALT = 230000)"                              
+##  [29] "CHEMICAL, FUNGICIDE: (POTASSIUM BICARBON. = 73508)"                                
+##  [30] "CHEMICAL, FUNGICIDE: (PROPICONAZOLE = 122101)"                                     
+##  [31] "CHEMICAL, FUNGICIDE: (PYRACLOSTROBIN = 99100)"                                     
+##  [32] "CHEMICAL, FUNGICIDE: (PYRIMETHANIL = 288201)"                                      
+##  [33] "CHEMICAL, FUNGICIDE: (QUINOLINE = 55459)"                                          
+##  [34] "CHEMICAL, FUNGICIDE: (STREPTOMYCES LYDICUS = 6327)"                                
+##  [35] "CHEMICAL, FUNGICIDE: (SULFUR = 77501)"                                             
+##  [36] "CHEMICAL, FUNGICIDE: (TETRACONAZOLE = 120603)"                                     
+##  [37] "CHEMICAL, FUNGICIDE: (THIOPHANATE-METHYL = 102001)"                                
+##  [38] "CHEMICAL, FUNGICIDE: (THIRAM = 79801)"                                             
+##  [39] "CHEMICAL, FUNGICIDE: (TOTAL)"                                                      
+##  [40] "CHEMICAL, FUNGICIDE: (TRICHODERMA HARZ. = 119202)"                                 
+##  [41] "CHEMICAL, FUNGICIDE: (TRIFLOXYSTROBIN = 129112)"                                   
+##  [42] "CHEMICAL, FUNGICIDE: (TRIFLUMIZOLE = 128879)"                                      
+##  [43] "CHEMICAL, HERBICIDE: (CARFENTRAZONE-ETHYL = 128712)"                               
+##  [44] "CHEMICAL, HERBICIDE: (FLUMIOXAZIN = 129034)"                                       
+##  [45] "CHEMICAL, HERBICIDE: (GLUFOSINATE-AMMONIUM = 128850)"                              
+##  [46] "CHEMICAL, HERBICIDE: (GLYPHOSATE ISO. SALT = 103601)"                              
+##  [47] "CHEMICAL, HERBICIDE: (GLYPHOSATE POT. SALT = 103613)"                              
+##  [48] "CHEMICAL, HERBICIDE: (NAPROPAMIDE = 103001)"                                       
+##  [49] "CHEMICAL, HERBICIDE: (OXYFLUORFEN = 111601)"                                       
+##  [50] "CHEMICAL, HERBICIDE: (PARAQUAT = 61601)"                                           
+##  [51] "CHEMICAL, HERBICIDE: (PENDIMETHALIN = 108501)"                                     
+##  [52] "CHEMICAL, HERBICIDE: (SULFENTRAZONE = 129081)"                                     
+##  [53] "CHEMICAL, HERBICIDE: (TOTAL)"                                                      
+##  [54] "CHEMICAL, INSECTICIDE: (ABAMECTIN = 122804)"                                       
+##  [55] "CHEMICAL, INSECTICIDE: (ACEQUINOCYL = 6329)"                                       
+##  [56] "CHEMICAL, INSECTICIDE: (ACETAMIPRID = 99050)"                                      
+##  [57] "CHEMICAL, INSECTICIDE: (AZADIRACHTIN = 121701)"                                    
+##  [58] "CHEMICAL, INSECTICIDE: (BEAUVERIA BASSIANA = 128924)"                              
+##  [59] "CHEMICAL, INSECTICIDE: (BIFENAZATE = 586)"                                         
+##  [60] "CHEMICAL, INSECTICIDE: (BIFENTHRIN = 128825)"                                      
+##  [61] "CHEMICAL, INSECTICIDE: (BT KURSTAK ABTS-1857 = 6523)"                              
+##  [62] "CHEMICAL, INSECTICIDE: (BT KURSTAKI ABTS-351 = 6522)"                              
+##  [63] "CHEMICAL, INSECTICIDE: (BT KURSTAKI SA-11 = 6519)"                                 
+##  [64] "CHEMICAL, INSECTICIDE: (BT SUB AIZAWAI GC-91 = 6426)"                              
+##  [65] "CHEMICAL, INSECTICIDE: (BUPROFEZIN = 275100)"                                      
+##  [66] "CHEMICAL, INSECTICIDE: (BURKHOLDERIA A396 CELLS & MEDIA = 6534)"                   
+##  [67] "CHEMICAL, INSECTICIDE: (CARBARYL = 56801)"                                         
+##  [68] "CHEMICAL, INSECTICIDE: (CHLORANTRANILIPROLE = 90100)"                              
+##  [69] "CHEMICAL, INSECTICIDE: (CHLORPYRIFOS = 59101)"                                     
+##  [70] "CHEMICAL, INSECTICIDE: (CHROMOBAC SUBTSUGAE PRAA4-1 CELLS AND SPENT MEDIA = 16329)"
+##  [71] "CHEMICAL, INSECTICIDE: (CYANTRANILIPROLE = 90098)"                                 
+##  [72] "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN = 138831)"                                    
+##  [73] "CHEMICAL, INSECTICIDE: (ETOXAZOLE = 107091)"                                       
+##  [74] "CHEMICAL, INSECTICIDE: (FENBUTATIN-OXIDE = 104601)"                                
+##  [75] "CHEMICAL, INSECTICIDE: (FENPROPATHRIN = 127901)"                                   
+##  [76] "CHEMICAL, INSECTICIDE: (FENPYROXIMATE = 129131)"                                   
+##  [77] "CHEMICAL, INSECTICIDE: (FLONICAMID = 128016)"                                      
+##  [78] "CHEMICAL, INSECTICIDE: (FLUPYRADIFURONE = 122304)"                                 
+##  [79] "CHEMICAL, INSECTICIDE: (HELICOVERPA ZEA NPV = 107300)"                             
+##  [80] "CHEMICAL, INSECTICIDE: (HEXYTHIAZOX = 128849)"                                     
+##  [81] "CHEMICAL, INSECTICIDE: (IMIDACLOPRID = 129099)"                                    
+##  [82] "CHEMICAL, INSECTICIDE: (MALATHION = 57701)"                                        
+##  [83] "CHEMICAL, INSECTICIDE: (METHOXYFENOZIDE = 121027)"                                 
+##  [84] "CHEMICAL, INSECTICIDE: (NALED = 34401)"                                            
+##  [85] "CHEMICAL, INSECTICIDE: (NEEM OIL = 25006)"                                         
+##  [86] "CHEMICAL, INSECTICIDE: (NEEM OIL, CLAR. HYD. = 25007)"                             
+##  [87] "CHEMICAL, INSECTICIDE: (NOVALURON = 124002)"                                       
+##  [88] "CHEMICAL, INSECTICIDE: (PIPERONYL BUTOXIDE = 67501)"                               
+##  [89] "CHEMICAL, INSECTICIDE: (POTASSIUM SALTS = 79021)"                                  
+##  [90] "CHEMICAL, INSECTICIDE: (PYRETHRINS = 69001)"                                       
+##  [91] "CHEMICAL, INSECTICIDE: (PYRIDABEN = 129105)"                                       
+##  [92] "CHEMICAL, INSECTICIDE: (PYRIPROXYFEN = 129032)"                                    
+##  [93] "CHEMICAL, INSECTICIDE: (SOYBEAN OIL = 31605)"                                      
+##  [94] "CHEMICAL, INSECTICIDE: (SPINETORAM = 110007)"                                      
+##  [95] "CHEMICAL, INSECTICIDE: (SPINOSAD = 110003)"                                        
+##  [96] "CHEMICAL, INSECTICIDE: (SPIROMESIFEN = 24875)"                                     
+##  [97] "CHEMICAL, INSECTICIDE: (SULFOXAFLOR = 5210)"                                       
+##  [98] "CHEMICAL, INSECTICIDE: (THIAMETHOXAM = 60109)"                                     
+##  [99] "CHEMICAL, INSECTICIDE: (TOTAL)"                                                    
+## [100] "CHEMICAL, INSECTICIDE: (ZETA-CYPERMETHRIN = 129064)"                               
+## [101] "CHEMICAL, OTHER: (ACIBENZOLAR-S-METHYL = 61402)"                                   
+## [102] "CHEMICAL, OTHER: (AUREOBASIDIUM PULLULANS DSM 14940 = 46010)"                      
+## [103] "CHEMICAL, OTHER: (AUREOBASIDIUM PULLULANS DSM 14941 = 36010)"                      
+## [104] "CHEMICAL, OTHER: (BT KURSTAKI SA-12 = 6518)"                                       
+## [105] "CHEMICAL, OTHER: (CAPRIC ACID = 128955)"                                           
+## [106] "CHEMICAL, OTHER: (CAPRYLIC ACID = 128919)"                                         
+## [107] "CHEMICAL, OTHER: (CHLOROPICRIN = 81501)"                                           
+## [108] "CHEMICAL, OTHER: (DICHLOROPROPENE = 29001)"                                        
+## [109] "CHEMICAL, OTHER: (FLUTRIAFOL = 128940)"                                            
+## [110] "CHEMICAL, OTHER: (GLIOCLADIUM VIRENS = 129000)"                                    
+## [111] "CHEMICAL, OTHER: (HYDROGEN PEROXIDE = 595)"                                        
+## [112] "CHEMICAL, OTHER: (IRON PHOSPHATE = 34903)"                                         
+## [113] "CHEMICAL, OTHER: (METALDEHYDE = 53001)"                                            
+## [114] "CHEMICAL, OTHER: (METAM-POTASSIUM = 39002)"                                        
+## [115] "CHEMICAL, OTHER: (METAM-SODIUM = 39003)"                                           
+## [116] "CHEMICAL, OTHER: (PAECILOMYCES FUMOSOR = 115002)"                                  
+## [117] "CHEMICAL, OTHER: (PEROXYACETIC ACID = 63201)"                                      
+## [118] "CHEMICAL, OTHER: (POTASSIUM SILICATE = 72606)"                                     
+## [119] "CHEMICAL, OTHER: (REYNOUTRIA SACHALINE = 55809)"                                   
+## [120] "CHEMICAL, OTHER: (TOTAL)"                                                          
+## [121] "CHEMICAL, OTHER: (TRICHODERMA VIRENS STRAIN G-41 = 176604)"                        
+## [122] "FERTILIZER: (NITROGEN)"                                                            
+## [123] "FERTILIZER: (PHOSPHATE)"                                                           
+## [124] "FERTILIZER: (POTASH)"                                                              
+## [125] "FERTILIZER: (SULFUR)"                                                              
+## [126] "CHEMICAL, FUNGICIDE: (COPPER CHLORIDE HYD. = 23501)"                               
+## [127] "CHEMICAL, FUNGICIDE: (DODINE = 44301)"                                             
+## [128] "CHEMICAL, FUNGICIDE: (FLUTOLANIL = 128975)"                                        
+## [129] "CHEMICAL, HERBICIDE: (2,4-D, DIMETH. SALT = 30019)"                                
+## [130] "CHEMICAL, HERBICIDE: (2,4-D, TRIISO. SALT = 30035)"                                
+## [131] "CHEMICAL, INSECTICIDE: (CYPERMETHRIN = 109702)"                                    
+## [132] "CHEMICAL, OTHER: (ALKYL. DIM. BENZ. AM = 69105)"                                   
+## [133] "CHEMICAL, OTHER: (DECYLDIMETHYLOCTYL = 69165)"                                     
+## [134] "CHEMICAL, OTHER: (DIDECYL DIM. AMMON. = 69166)"                                    
+## [135] "CHEMICAL, OTHER: (DIMETHYLDIOCTYL = 69149)"                                        
+## [136] "CHEMICAL, FUNGICIDE: (IPRODIONE = 109801)"                                         
+## [137] "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN\xa0= 138831)"                                    
+## [138] "CHEMICAL, INSECTICIDE: (DIAZINON = 57801)"                                         
+## [139] "CHEMICAL, INSECTICIDE: (EMAMECTIN BENZOATE = 122806)"                              
+## [140] "CHEMICAL, INSECTICIDE: (LAMBDA-CYHALOTHRIN = 128897)"                              
+## [141] "CHEMICAL, INSECTICIDE: (SPIROTETRAMAT = 392201)"                                   
+## [142] "CHEMICAL, INSECTICIDE: (MUSTARD OIL = 4901)"                                       
+## [143] "CHEMICAL, OTHER: (CYTOKININS = 116801)"                                            
+## [144] "CHEMICAL, OTHER: (DIMETHYL DISULFIDE (DMDS) = 29088)"                              
+## [145] "CHEMICAL, FUNGICIDE: (COPPER OXIDE = 25601)"                                       
+## [146] "CHEMICAL, HERBICIDE: (AMMONIUM PELARGONATE = 31802)"                               
+## [147] "CHEMICAL, INSECTICIDE: (FLUBENDIAMIDE = 27602)"                                    
+## [148] "CHEMICAL, OTHER: (METHYL BROMIDE = 53201)"                                         
+## [149] "CHEMICAL, OTHER: (MINERAL OIL = 63502)"                                            
+## [150] "CHEMICAL, FUNGICIDE: (CHLOROTHALONIL = 81901)"                                     
+## [151] "CHEMICAL, FUNGICIDE: (CYAZOFAMID = 85651)"                                         
+## [152] "CHEMICAL, FUNGICIDE: (MANCOZEB = 14504)"                                           
+## [153] "CHEMICAL, HERBICIDE: (HALOSULFURON-METHYL = 128721)"                               
+## [154] "CHEMICAL, INSECTICIDE: (ENDOSULFAN = 79401)"                                       
+## [155] "CHEMICAL, OTHER: (CAPSAICIN = 70701)"                                              
+## [156] "CHEMICAL, OTHER: (HARPIN A B PROTEIN = 6506)"                                      
+## [157] "CHEMICAL, HERBICIDE: (CLETHODIM = 121011)"                                         
+## [158] "CHEMICAL, HERBICIDE: (CLOPYRALID MONO SALT = 117401)"                              
+## [159] "CHEMICAL, HERBICIDE: (SIMAZINE = 80807)"                                           
+## [160] "CHEMICAL, HERBICIDE: (TERBACIL = 12701)"                                           
+## [161] "CHEMICAL, INSECTICIDE: (FERRIC SODIUM EDTA = 139114)"                              
+## [162] "CHEMICAL, HERBICIDE: (CLOMAZONE = 125401)"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# separate Domain Category by ","}
+
+\NormalTok{sberry }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{separate}\NormalTok{(}\StringTok{`}\DataTypeTok{Domain Category}\StringTok{`}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\StringTok{'dc1'}\NormalTok{, }\StringTok{'dc2'}\NormalTok{, }\StringTok{'dc_detail'}\NormalTok{), }\DataTypeTok{sep =} \StringTok{"[,}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{:]"}\NormalTok{, }\DataTypeTok{convert =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{extra =} \StringTok{"merge"}\NormalTok{)}
+
+\CommentTok{# Manually fix for type [4]}
+\CommentTok{# sberry %<>% mutate(dc2 = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN�= 138831)}
+\CommentTok{# ", "INSECTICIDE", dc2))}
+\CommentTok{# sberry %<>% mutate(dc_detail = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN\textbackslash{}xa0= 138831)", "(CYFLUMETOFEN = 138831)", dc_detail))}
+\CommentTok{# sberry %<>% mutate(dc1 = ifelse(dc1 == "CHEMICAL, INSECTICIDE: (CYFLUMETOFEN\textbackslash{}xa0= 138831)", "CHEMICAL", dc1))}
+
+\NormalTok{sberry[}\KeywordTok{is.na}\NormalTok{(sberry)] <-}\StringTok{ " "}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{write.csv}\NormalTok{(sberry, }\StringTok{"sberry_cleaned.csv"}\NormalTok{)}
+\NormalTok{num<-}\StringTok{ }\NormalTok{sberry}
+\NormalTok{num}\OperatorTok{$}\NormalTok{Value <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{","}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{, sberry}\OperatorTok{$}\NormalTok{Value)}
+\NormalTok{num}\OperatorTok{$}\NormalTok{Value <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(num}\OperatorTok{$}\NormalTok{Value)}\OperatorTok{/}\DecValTok{1000000}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{exploratory-data-analysis}{%
+\subsection{Exploratory Data Analysis}\label{exploratory-data-analysis}}
+
+\hypertarget{total-production-data-for-each-state-across-the-years}{%
+\subsubsection{Total Production Data for each state across the
+years}\label{total-production-data-for-each-state-across-the-years}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d_total <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(sberry, domain1 }\OperatorTok{==}\StringTok{ "TOTAL"}\NormalTok{)}
+
+\CommentTok{# Subset where unit is in $}
+\NormalTok{usd <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(d_total, unit }\OperatorTok{==}\StringTok{ "$"}\NormalTok{)}
+\NormalTok{test <-}\StringTok{ }\NormalTok{usd}
+
+\CommentTok{# Set value to numeric}
+\NormalTok{usd}\OperatorTok{$}\NormalTok{Value <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{gsub}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{","}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{,usd}\OperatorTok{$}\NormalTok{Value))}
+\NormalTok{usd[}\KeywordTok{is.na}\NormalTok{(usd)] <-}\StringTok{ }\DecValTok{0}
+
+\CommentTok{# Prepare dataset of production for plots}
+\NormalTok{prod <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(usd, what }\OperatorTok{==}\StringTok{ " PRODUCTION"}\NormalTok{ )}
+
+\CommentTok{# Plot production by each state}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =} \KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{))}
+\NormalTok{state_list <-}\StringTok{ }\NormalTok{d_total}\OperatorTok{$}\NormalTok{State }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unique}\NormalTok{()}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ state_list) \{}
+\NormalTok{  stateTotal <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(prod, State }\OperatorTok{==}\StringTok{ }\NormalTok{i)}
+  \KeywordTok{plot}\NormalTok{(}\DataTypeTok{x =}\NormalTok{stateTotal}\OperatorTok{$}\NormalTok{Year, }\DataTypeTok{y =}\NormalTok{ stateTotal}\OperatorTok{$}\NormalTok{Value}\OperatorTok{/}\DecValTok{1000000}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{"Year"}\NormalTok{, }\DataTypeTok{ylab=}\KeywordTok{paste}\NormalTok{(i),}
+       \KeywordTok{title}\NormalTok{(}\DataTypeTok{main =} \StringTok{"Production in millions $"}\NormalTok{), }\DataTypeTok{pch =}\DecValTok{16}\NormalTok{, }\DataTypeTok{ylim =}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2900}\NormalTok{), }\DataTypeTok{xlim =} \KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{, }\DecValTok{2019}\NormalTok{))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{clean_strawberry_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\hypertarget{relationship-between-amount-of-fertilizers-and-yield-per-acre.}{%
+\subsubsection{Relationship between amount of fertilizers and yield per
+acre.}\label{relationship-between-amount-of-fertilizers-and-yield-per-acre.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#, warning=FALSE, message=FALSE}
+\CommentTok{# Prepare database for yield}
+\NormalTok{yield <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(d_total, what }\OperatorTok{==}\StringTok{ " YIELD"}\NormalTok{ )}
+
+
+\CommentTok{# # Make values numeric}
+\CommentTok{# yield %<>% mutate(Value = ifelse(Value=="(NA)", "0", Value) )}
+\CommentTok{# yield$Value %<>% as.numeric(yield$Value)  }
+\CommentTok{# # class(yield$Value)}
+
+\CommentTok{# Prepare database for fertilizer used, unit LB/ARE/YEAR}
+\NormalTok{fert <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(sberry, domain1 }\OperatorTok{==}\StringTok{"FERTILIZER"} \OperatorTok{&}\StringTok{ }\NormalTok{unit }\OperatorTok{==}\StringTok{ "LB / ACRE / YEAR"}\NormalTok{)}
+
+\CommentTok{# Since fertilizer data only exists for california and florida in year 2018 and 2019, }
+\NormalTok{yield <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(d_total, what }\OperatorTok{==}\StringTok{ " YIELD"} \OperatorTok{&}\StringTok{ }\NormalTok{(State }\OperatorTok{==}\StringTok{ "CALIFORNIA"} \OperatorTok{|}\StringTok{ }\NormalTok{State}\OperatorTok{==}\StringTok{ "FLORIDA"}\NormalTok{)}\OperatorTok{&}\StringTok{ }\NormalTok{(Year}\OperatorTok{==}\StringTok{"2019"} \OperatorTok{|}\NormalTok{Year}\OperatorTok{==}\StringTok{"2018"}\NormalTok{) ) }
+
+\NormalTok{fert }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{fill}\NormalTok{()}
+
+
+\NormalTok{fert}\OperatorTok{$}\NormalTok{yield <-}\StringTok{ }\OtherTok{NA}
+\NormalTok{statelist<-}\StringTok{ }\NormalTok{fert}\OperatorTok{%>%}\StringTok{ }\KeywordTok{unique}\NormalTok{()}
+
+\NormalTok{fert}\OperatorTok{$}\NormalTok{Value<-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(fert}\OperatorTok{$}\NormalTok{Value)}
+\NormalTok{fert[}\KeywordTok{is.na}\NormalTok{(fert)] <-}\StringTok{ }\DecValTok{0}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{15}\NormalTok{) \{}
+  \ControlFlowTok{if}\NormalTok{ (fert}\OperatorTok{$}\NormalTok{Year[i]}\OperatorTok{==}\StringTok{"2018"}\NormalTok{)\{}
+    \ControlFlowTok{if}\NormalTok{(fert}\OperatorTok{$}\NormalTok{State[i]}\OperatorTok{==}\StringTok{"CALIFORNIA"}\NormalTok{)\{}
+\NormalTok{      fert}\OperatorTok{$}\NormalTok{yield[i] <-}\StringTok{ }\DecValTok{660}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{      fert}\OperatorTok{$}\NormalTok{yield[i] <-}\StringTok{ }\DecValTok{250}
+\NormalTok{    \}}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \ControlFlowTok{if}\NormalTok{(fert}\OperatorTok{$}\NormalTok{State[i]}\OperatorTok{==}\StringTok{"CALIFORNIA"}\NormalTok{)\{}
+\NormalTok{      fert}\OperatorTok{$}\NormalTok{yield[i] <-}\StringTok{ }\DecValTok{580}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{      fert}\OperatorTok{$}\NormalTok{yield[i] <-}\StringTok{ }\DecValTok{215}
+\NormalTok{    \}}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ fert)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{ Value, }\DataTypeTok{y=}\NormalTok{ yield,  }\DataTypeTok{color =} \KeywordTok{factor}\NormalTok{(State)) )}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Strawberry Yield (CWT/ACRE)"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Fertilizer applied (LB /ACRE /Year)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{clean_strawberry_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{# title(main = "Strawberry yield as a function of fertilizers")}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{chemicals-used}{%
+\subsubsection{Chemicals used}\label{chemicals-used}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Dataframe of total amount of chemicals used}
+
+\NormalTok{chemi <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(sberry, dc_detail }\OperatorTok{==}\StringTok{" (TOTAL)"}\NormalTok{)}
+
+\NormalTok{chemi}\OperatorTok{$}\NormalTok{Value <-}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{gsub}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{","}\NormalTok{, }\DataTypeTok{replacement =} \StringTok{""}\NormalTok{,chemi}\OperatorTok{$}\NormalTok{Value)) }
+\KeywordTok{class}\NormalTok{(chemi}\OperatorTok{$}\NormalTok{Value)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "numeric"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{chemi[}\KeywordTok{is.na}\NormalTok{(chemi)] <-}\StringTok{ }\DecValTok{0}
+\NormalTok{state_chemi <-}\StringTok{ }\NormalTok{chemi}\OperatorTok{$}\NormalTok{State }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unique}\NormalTok{()}
+
+\CommentTok{# subsetting chemi into total chemical used and percentage of land used by unit}
+\NormalTok{chemi_pct <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(chemi, unit }\OperatorTok{==}\StringTok{ "PCT OF AREA BEARING"}\NormalTok{)}
+\NormalTok{chemi_lb <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(chemi,  unit }\OperatorTok{==}\StringTok{ "LB"}\NormalTok{)}
+
+
+\NormalTok{che <-}\StringTok{ }\NormalTok{chemi}\OperatorTok{$}\NormalTok{dc2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unique}\NormalTok{()}
+\CommentTok{# plot each state's use of different chemicals}
+\ControlFlowTok{for}\NormalTok{ (c }\ControlFlowTok{in}\NormalTok{ che) \{}
+\NormalTok{  cData <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(chemi_lb, dc2}\OperatorTok{==}\NormalTok{c)}
+\NormalTok{  chemiPlot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cData)}\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Year, }\DataTypeTok{y =}\NormalTok{ Value}\OperatorTok{/}\DecValTok{1000}\NormalTok{, }\DataTypeTok{color =} \KeywordTok{factor}\NormalTok{(State)))}\OperatorTok{+}
+\StringTok{    }\KeywordTok{ylim}\NormalTok{(c)}\OperatorTok{+}
+\StringTok{    }\KeywordTok{xlim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{2016}\NormalTok{,}\DecValTok{2019}\NormalTok{))}\OperatorTok{+}\KeywordTok{ylim}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{8000}\NormalTok{))}
+  
+  \CommentTok{# for (c in che) \{}
+  \CommentTok{#   cData <- subset(state, dc2==c)}
+  \CommentTok{#   plot(x = cData$Year, y= cData$Value, xlab="Year", ylab = s)}
+  \CommentTok{# \}}
+  \KeywordTok{print}\NormalTok{(chemiPlot)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{clean_strawberry_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{clean_strawberry_files/figure-latex/unnamed-chunk-8-2.pdf}
+\includegraphics{clean_strawberry_files/figure-latex/unnamed-chunk-8-3.pdf}
+\includegraphics{clean_strawberry_files/figure-latex/unnamed-chunk-8-4.pdf}
+
+\hypertarget{reference}{%
+\subsection{Reference}\label{reference}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{citation}\NormalTok{(}\StringTok{"knitr"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## To cite the 'knitr' package in publications use:
+## 
+##   Yihui Xie (2020). knitr: A General-Purpose Package for Dynamic Report
+##   Generation in R. R package version 1.29.
+## 
+##   Yihui Xie (2015) Dynamic Documents with R and knitr. 2nd edition.
+##   Chapman and Hall/CRC. ISBN 978-1498716963
+## 
+##   Yihui Xie (2014) knitr: A Comprehensive Tool for Reproducible
+##   Research in R. In Victoria Stodden, Friedrich Leisch and Roger D.
+##   Peng, editors, Implementing Reproducible Computational Research.
+##   Chapman and Hall/CRC. ISBN 978-1466561595
+## 
+## To see these entries in BibTeX format, use 'print(<citation>,
+## bibtex=TRUE)', 'toBibtex(.)', or set
+## 'options(citation.bibtex.max=999)'.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{citation}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open
+##   Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Article{,
+##     title = {Welcome to the {tidyverse}},
+##     author = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D'Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},
+##     year = {2019},
+##     journal = {Journal of Open Source Software},
+##     volume = {4},
+##     number = {43},
+##     pages = {1686},
+##     doi = {10.21105/joss.01686},
+##   }
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{citation}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## To cite ggplot2 in publications, please use:
+## 
+##   H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
+##   Springer-Verlag New York, 2016.
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Book{,
+##     author = {Hadley Wickham},
+##     title = {ggplot2: Elegant Graphics for Data Analysis},
+##     publisher = {Springer-Verlag New York},
+##     year = {2016},
+##     isbn = {978-3-319-24277-4},
+##     url = {https://ggplot2.tidyverse.org},
+##   }
+\end{verbatim}
+
+\end{document}
